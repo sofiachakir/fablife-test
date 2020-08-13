@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getManager, Connection } from 'typeorm';
+import { Repository, getManager } from 'typeorm';
 
 import { Recipe } from '../db/recipe.entity';
 import { IngredientToRecipe } from '../db/ingredient-to-recipe.entity';
-import { Ingredient } from '../db/ingredient.entity';
 
 import { RecipeDto } from './dto/recipe.dto';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
@@ -15,7 +14,6 @@ export class RecipesService {
 	constructor(
 		@InjectRepository(Recipe)
 		private recipesRepository: Repository<Recipe>,
-		private connection: Connection,
 	) {}
 
 	async create(recipeDto: RecipeDto): Promise<Recipe> {

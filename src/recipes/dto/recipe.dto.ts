@@ -1,4 +1,4 @@
-import {IngredientToRecipeDto} from './ingredient-to-recipe.dto'
+import { IngredientToRecipeDto } from './ingredient-to-recipe.dto'
 
 export class RecipeDto {
 	name: string;
