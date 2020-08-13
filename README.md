@@ -49,6 +49,16 @@ $ npm install
 
 This API requires a local PostgreSQL installation. See ormconfig.json for credentials, and make sure there are matching credentials in your local database and the source code.
 
+To create a local PostgreSQL database:
+```bash
+$ sudo -u postgres psql
+postgres=# create database fablife;
+postgres=# \q
+$ psql fablife
+fablife=# \password
+Enter new password
+```
+
 Then, run Nest as usual:
 
 ```bash
@@ -108,13 +118,4 @@ $ curl -X DELETE "http://localhost:3000/recipes/1"
 
 ## Test
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
+Tests are not written yet in this version
