@@ -1,34 +1,45 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Fablife Technical Test
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This is a NestJS API to manage simple cooking recipes.
 
-## Description
+## Test requirements 
+Tech :
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+    NestJS for the software
+    PostgreSQL for the storage
+
+User Stories :
+
+    As a user, I want to manage (create, read, update, delete) ingredients
+    As a user, I want to manage (create, read, update, delete) recipes
+
+Models  :
+
+    Ingredient
+        id
+        name
+        aisle
+    Recipe
+        id
+        name
+        type : ‘breakfast’ | ‘lunch’ | ‘dinner'
+        ingredients
+        instructions
+
+Constraints :
+
+    By convention, ingredients quantities are stored in grams
+    The API must send back a HTTP 409 status when receiving a request to remove an ingredient which is referenced in at least 1 recipe
+    For recipes, before every database write, there must be a comparison between the current name and the new name. If these 2 names are different, log in the console the word : “BAZINGA"
+
+
+Expected result :
+
+    A git repository with the source code and a README.md file describing how to install the software and how to use it
 
 ## Installation
+
+To use this app locally, download the repo or clone it.
 
 ```bash
 $ npm install
@@ -36,15 +47,63 @@ $ npm install
 
 ## Running the app
 
+This API requires a local PostgreSQL installation. See ormconfig.json for credentials, and make sure there are matching credentials in your local database and the source code.
+
+Then, run Nest as usual:
+
 ```bash
-# development
 $ npm run start
+```
 
-# watch mode
-$ npm run start:dev
+## Using the app
 
-# production mode
-$ npm run start:prod
+When the server is running, open another terminal and run the following commands :
+
+### CRUD Ingredients
+
+- Create ingredients
+```bash
+$ curl -d "name=chocolate&aisle=grocery" -X POST "http://localhost:3000/ingredients"
+$ curl -d "name=eggs&aisle=eggs" -X POST "http://localhost:3000/ingredients"
+```
+- Read an ingredient
+```bash
+$ curl "http://localhost:3000/ingredients/1"
+```
+- Read all ingredients
+```bash
+$ curl "http://localhost:3000/ingredients"
+```
+- Update an ingredient
+```bash
+$ curl -d "name=hazelnut" -X PUT "http://localhost:3000/ingredients/1" 
+```
+- Delete an ingredient
+```bash
+$ curl -X DELETE "http://localhost:3000/ingredients/1" 
+```
+
+### CRUD Recipes
+
+- Create a recipe
+```bash
+$ curl -d '{"name":"chocolate cake", "type":"breakfast", "instructions":"1. Pour the flour, baking powder and cocoa through a sifter. 2. ...", "ingredientsToRecipeDto" : [{"ingredientId":"1", "quantity":"200"}, {"ingredientId":"2", "quantity":"100"} ] }' -H "Content-Type: application/json" -X POST http://localhost:3000/recipes
+```
+- Read a recipe
+```bash
+$ curl "http://localhost:3000/recipes/1" 
+```
+- Read all recipes
+```bash
+$ curl "http://localhost:3000/recipes"
+```
+- Update a recipe
+```bash
+$ curl -d '{"name":"the best chocolate cake", "ingredientsToRecipeDto" : [{"ingredientId":"1", "quantity":"400"}, {"ingredientId":"2", "quantity":"150"} ] }' -H "Content-Type: application/json" -X PUT "http://localhost:3000/recipes/1"
+```
+- Delete a recipe
+```bash
+$ curl -X DELETE "http://localhost:3000/recipes/1" 
 ```
 
 ## Test
@@ -59,17 +118,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-  Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

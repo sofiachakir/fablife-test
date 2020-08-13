@@ -1,0 +1,16 @@
+{
+	"type": "postgres",
+	"host": "localhost",
+	"port": 5432,
+	"username": "sofia",
+	"password": "fablife",
+	"database": "fablife",
+	"entities": [
+		"dist/db/ingredient.entity.js", 
+		"dist/db/recipe.entity.js",
+		"dist/db/ingredient-to-recipe.entity.js"
+	],
+	"synchronize": false,
+	"migrations": ["dist/migrations/*{.ts,.js}"],
+  "migrationsRun": true
+}
